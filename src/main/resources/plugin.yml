@@ -1,0 +1,27 @@
+name: AnarchyStabilizer
+
+version: 1.1.0
+
+main: com.krystalfox.anarchystabilizer.AnarchyStabilizer
+
+api-version: '1.20'
+
+author: Diamond
+
+description: Plugin para mejorar la estabilidad en servidores anárquicos/semi-anárquicos mediante el control de mecánicas específicas.
+
+
+commands:
+  as:
+    description: Comando principal para AnarchyStabilizer.
+    usage: /<command> <subcommand> [args...]
+    aliases: [anarchystabilizer, astabilizer]
+    permission: anarchystabilizer.command.base
+permissions:
+  anarchystabilizer.command.base:
+    description: Permite usar el comando base /as para ver información o ayuda.
+    default: true
+
+  anarchystabilizer.command.reload:
+    description: Permite usar el subcomando /as reload para recargar la configuración.
+    default: op

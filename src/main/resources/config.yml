@@ -1,0 +1,105 @@
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#          AnarchyStabilizer Configuration        #
+#                    v1.1                       #
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+# Global feature toggles to enable/disable entire plugin modules.
+# Set to 'false' to completely disable a feature.
+features:
+  redstone_control: true      # Enable/disable redstone controls.
+  armor_stand_control: true   # Enable/disable Armor Stand controls (placement/periodic removal).
+  item_cleanup: true          # Enable/disable periodic ground item cleanup.
+  entity_limit_control: true  # Enable/disable entity limit controls (per chunk or placement prevention).
+
+#-------------------------------------------------#
+# Redstone Control Settings                      #
+# (Active only if features.redstone_control is true)
+#-------------------------------------------------#
+redstone:
+  # Control mode:
+  #   off: No redstone control active.
+  #   disable_all: Attempt to disable ALL redstone activations (use with caution!).
+  #   disable_list: Disable only specific mechanisms listed below.
+  mode: 'disable_list'
+
+  # List of mechanism block types (Bukkit Material names) to disable if mode is 'disable_list'.
+  # Find names here: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
+  disabled_mechanisms:
+    - 'PISTON'
+    - 'STICKY_PISTON'
+    - 'OBSERVER'
+    - 'DISPENSER'
+    - 'DROPPER'
+    # - 'COMPARATOR' # Example of a commented-out (disabled) mechanism
+    # - 'REPEATER'   # Example of a commented-out (disabled) mechanism
+
+#-------------------------------------------------#
+# Armor Stand Control Settings                   #
+# (Active only if features.armor_stand_control is true)
+#-------------------------------------------------#
+armor_stand:
+  # Control mode:
+  #   off: No special control active.
+  #   prevent_placement: Players cannot place new Armor Stands.
+  #   remove_on_placement: New Armor Stands are removed instantly upon placement (effectively prevents placement).
+  #   remove_all_periodically: Periodically removes ALL existing Armor Stands (USE WITH CAUTION!).
+  mode: 'prevent_placement' # Default to a safe option.
+
+  # Settings only used if mode is 'remove_all_periodically'
+  periodic_removal:
+    # Interval (in seconds) for the periodic removal task.
+    interval_seconds: 600  # 10 minutes by default
+    # Send a global warning message before removal?
+    warn_before_removal: true
+    # How many seconds before removal to send the warning?
+    warning_time_seconds: 30
+    # Warning message. Use '&' for color codes. {time} is replaced with warning_time_seconds.
+    warning_message: "&cWarning! All Armor Stands will be removed in {time} seconds!"
+    # Message sent after removal. {count} might be added later if the code is modified.
+    removal_message: "&aAll existing Armor Stands have been removed."
+
+#-------------------------------------------------#
+# Item Cleanup Settings                          #
+# (Active only if features.item_cleanup is true)
+#-------------------------------------------------#
+item_cleanup:
+  # Interval (in seconds) between item cleanup cycles.
+  interval_seconds: 300   # 5 minutes by default
+  # List of times (in seconds BEFORE cleanup) to broadcast global warnings.
+  # Ordering high to low is recommended for sensible warnings.
+  warning_times_seconds: [60, 30, 10] # Warns 1 min before, 30 sec before, 10 sec before.
+  # Warning message. Use '&' for color codes. {time} is replaced with the remaining seconds.
+  warning_message: "&eWarning: Ground items will be cleared in {time} seconds!"
+  # Message sent after items are cleared. {count} might be added if the code is modified.
+  cleanup_message: "&aGround items cleared."
+
+#-------------------------------------------------#
+# Entity Limit Control Settings                  #  <--- SECTION RENAMED
+# (Active only if features.entity_limit_control is true) <--- Comment updated
+#-------------------------------------------------#
+entity_limit_control: # <--- TOP-LEVEL KEY RENAMED
+  # Control mode:
+  #   off: No special entity limit control active.
+  #   limit_per_chunk: Limits the number of configured entities (minecarts/boats/armor_stands) per loaded chunk (recommended).
+  #   prevent_placement: Players cannot place new configured vehicles (minecarts/boats). Legacy mode, may change.
+  mode: 'limit_per_chunk' # Recommended default mode
+
+  # Settings only used if mode is 'limit_per_chunk'
+  limit_settings:
+    # How often (in seconds) to check loaded chunks and remove excess entities?
+    check_interval_seconds: 20 # 20 seconds by default
+    # Maximum number of Minecarts (all types) allowed per chunk. Excess ones will be removed.
+    # Set to 0 to disable the limit for Minecarts.
+    minecart_limit_per_chunk: 25
+    # Maximum number of Boats (all types) allowed per chunk. Excess ones will be removed.
+    # Set to 0 to disable the limit for Boats.
+    boat_limit_per_chunk: 15
+    # Maximum number of Armor Stands allowed per chunk. Excess ones will be removed. # <--- NEW OPTION
+    # Set to 0 to disable the limit for Armor Stands.
+    armor_stand_limit_per_chunk: 10 # <--- NEW OPTION (Default value 10)
+    # Log a message to the console when excess entities are removed?
+    log_removals: true
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#              End of Configuration               #
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
